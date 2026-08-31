@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { Inter } from 'next/font/google';
+import { GoogleAnalytics } from '@/components/observability/GoogleAnalytics/GoogleAnalytics';
 import './globals.css';
 import { Providers } from './providers';
 
@@ -17,7 +18,8 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html lang="en" className={inter.variable}>
-      <body>
+      <body className="font-sans antialiased">
+        <GoogleAnalytics />
         <Providers>{children}</Providers>
       </body>
     </html>
