@@ -8,14 +8,19 @@ export const GoogleAnalytics = () => {
     return null;
   }
 
+  const measurementIdLiteral = JSON.stringify(measurementId).replace(
+    /</g,
+    '\\u003c',
+  );
+
   return (
     <>
       <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`}
         strategy="afterInteractive"
       />
       <Script id={GA_SCRIPT_ID} strategy="afterInteractive">
-        {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${measurementId}');`}
+        {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config',${measurementIdLiteral});`}
       </Script>
     </>
   );

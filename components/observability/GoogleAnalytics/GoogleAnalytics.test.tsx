@@ -33,7 +33,7 @@ describe('GoogleAnalytics', () => {
   });
 
   it('loads gtag scripts when the measurement id is set', async () => {
-    const measurementId = 'G-TESTMEASURE';
+    const measurementId = `G-TEST');window.compromised=true;//</script>`;
     vi.stubEnv('NEXT_PUBLIC_GA_MEASUREMENT_ID', measurementId);
     const { GoogleAnalytics } = await import('./GoogleAnalytics');
     const { GA_SCRIPT_ID } = await import('./constants');
@@ -41,11 +41,14 @@ describe('GoogleAnalytics', () => {
 
     expect(
       container.querySelector(
-        `[data-src="https://www.googletagmanager.com/gtag/js?id=${measurementId}"]`,
+        `[data-src="https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}"]`,
       ),
     ).not.toBeNull();
-    expect(container.querySelector(`#${GA_SCRIPT_ID}`)?.textContent).toContain(
-      measurementId,
+    const inlineScript =
+      container.querySelector(`#${GA_SCRIPT_ID}`)?.textContent ?? '';
+    expect(inlineScript).toContain(
+      `gtag('config',${JSON.stringify(measurementId).replace(/</g, '\\u003c')});`,
     );
+    expect(inlineScript).not.toContain('</script>');
   });
 });
