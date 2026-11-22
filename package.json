@@ -24,6 +24,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@sentry/nextjs": "10.72.0",
     "@tanstack/react-query": "5.101.4",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
